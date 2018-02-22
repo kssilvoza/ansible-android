@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Ansible</string>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">1168863359850905</string>
+    <string-array name="facebook_permissions">
+        <item>public_profile</item>
+        <item>email</item>
+    </string-array>
+
+    <string name="spiel_network_error">No Internet Connection</string>
+    <string name="spiel_default_error">Something went wrong. Please try again later</string>
+
+    <string name="label_sign_in_facebook">Sign In Via Facebook</string>
+    <string name="label_sign_in_twitter">Sign In Via Twitter</string>
+</resources>
