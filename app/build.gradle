@@ -7,15 +7,16 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion androidConfiguration.compileSdkVersion
     defaultConfig {
         applicationId "com.io.ansible"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion androidConfiguration.minSdkVersion
+        targetSdkVersion androidConfiguration.targetSdkVersion
+        versionCode androidConfiguration.versionCode
+        versionName androidConfiguration.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -54,71 +55,78 @@ dependencies {
      * Kotlin libraries
      */
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:0.1'
+    implementation "androidx.core:core-ktx:$dependencyVersions.ktx"
 
     /**
      * Support libraries
      */
-    implementation 'com.android.support:support-compat:27.0.2'
-    implementation 'com.android.support:support-fragment:27.0.2'
-    implementation 'com.android.support:appcompat-v7:27.0.2'
-    implementation 'com.android.support:design:27.0.2'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation "com.android.support:support-compat:$dependencyVersions.support"
+    implementation "com.android.support:support-fragment:$dependencyVersions.support"
+    implementation "com.android.support:appcompat-v7:$dependencyVersions.support"
+    implementation "com.android.support:design:$dependencyVersions.support"
+    implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.supportConstraintLayout"
 
     /**
      * Lifecycle
      */
-    implementation 'android.arch.lifecycle:extensions:1.1.0'
-    kapt 'android.arch.lifecycle:compiler:1.1.0'
+    implementation "android.arch.lifecycle:extensions:$dependencyVersions.lifecycle"
+    kapt "android.arch.lifecycle:compiler:$dependencyVersions.lifecycle"
+
+    /**
+     * Room
+     */
+    implementation "android.arch.persistence.room:runtime:$dependencyVersions.room"
+    implementation "android.arch.persistence.room:rxjava2:$dependencyVersions.roomRxJava2"
+    kapt "android.arch.persistence.room:compiler:$dependencyVersions.room"
 
     /**
      * RxJava
      */
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
-    implementation 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3'
+    implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
+    implementation "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
+    implementation "com.f2prateek.rx.preferences2:rx-preferences:$dependencyVersions.rxPreferences"
 
     /**
      * Network
      */
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation "com.squareup.retrofit2:retrofit:$dependencyVersions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$dependencyVersions.retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$dependencyVersions.retrofit"
+    implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okhttp"
 
     /**
      * Picasso
      */
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation "com.squareup.picasso:picasso:$dependencyVersions.picasso"
 
     /**
      * Injection
      */
-    implementation 'com.google.dagger:dagger:2.14.1'
-    implementation 'com.google.dagger:dagger-android:2.14.1'
-    implementation 'com.google.dagger:dagger-android-support:2.14.1'
-    kapt 'com.google.dagger:dagger-compiler:2.14.1'
-    kapt 'com.google.dagger:dagger-android-processor:2.14.1'
+    implementation "com.google.dagger:dagger:$dependencyVersions.dagger"
+    implementation "com.google.dagger:dagger-android:$dependencyVersions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$dependencyVersions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$dependencyVersions.dagger"
 
     /**
      * Json Parser
      */
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "com.google.code.gson:gson:$dependencyVersions.gson"
 
     /**
      * Facebook
      */
-    implementation 'com.facebook.android:facebook-android-sdk:4.30.0'
+    implementation "com.facebook.android:facebook-android-sdk:$dependencyVersions.facebook"
 
     /**
      * Testing
      */
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.8.9'
-    testImplementation 'org.mockito:mockito-inline:2.8.9'
-    testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
-    testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation "junit:junit:$dependencyVersions.junit"
+    testImplementation "org.mockito:mockito-core:$dependencyVersions.mockito"
+    testImplementation "org.mockito:mockito-inline:$dependencyVersions.mockito"
+    testImplementation "org.powermock:powermock-api-mockito2:$dependencyVersions.powermock"
+    testImplementation "org.powermock:powermock-module-junit4:$dependencyVersions.powermock"
+    androidTestImplementation "com.android.support.test:runner:$dependencyVersions.testRunner"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$dependencyVersions.espresso"
 }

@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.io.ansible.common.rxpreferences.GsonPreferenceConverter
 import com.io.ansible.common.singleton.SingletonHolder
 import com.io.ansible.network.ansible.model.AuthTokens
+import com.io.ansible.network.ansible.model.Pagination
 import com.io.ansible.network.ansible.model.Profile
 
 /**
@@ -17,6 +18,8 @@ class Preferences private constructor(context: Context) {
     var authTokensPreference: Preference<AuthTokens>
         private set
     var profilePreference: Preference<Profile>
+        private set
+    var contactPaginationPreference: Preference<Pagination>
         private set
 
     init {
@@ -34,10 +37,16 @@ class Preferences private constructor(context: Context) {
                 Profile("", "", "", "", "", ""),
                 GsonPreferenceConverter<Profile>(gson, Profile::class.java)
         )
+        contactPaginationPreference = rxSharedPreferences.getObject(
+                KEY_CONTACT_PAGINATION,
+                Pagination("", ""),
+                GsonPreferenceConverter<Pagination>(gson, Pagination::class.java)
+        )
     }
 
     companion object : SingletonHolder<Preferences, Context>(::Preferences){
         private const val KEY_AUTH_TOKENS = "key_auth_tokens"
         private const val KEY_PROFILE = "key_auth_profile"
+        private const val KEY_CONTACT_PAGINATION = "key_contact_pagination"
     }
 }

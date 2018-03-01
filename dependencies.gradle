@@ -1,0 +1,73 @@
+ext.androidConfiguration = [
+        compileSdkVersion       : 27,
+        minSdkVersion           : 16,
+        targetSdkVersion        : 27,
+        versionCode             : 1,
+        versionName             : "1.0",
+]
+
+ext.dependencyVersions = [
+        /**
+         * Kotlin libraries
+         */
+        ktx                     : "0.1",
+
+        /**
+         * Support libraries
+         */
+        support                 : "27.0.2",
+        supportConstraintLayout : "1.0.2",
+
+        /**
+         * Lifecycle
+         */
+        lifecycle               : "1.1.0",
+
+        /**
+         * Room
+         */
+        room                    : "1.1.0-alpha2",
+        roomRxJava2             : "1.1.0-alpha1",
+
+        /**
+         * RxJava
+         */
+        rxJava2                 : "2.1.8",
+        rxAndroid               : "2.0.1",
+        rxPreferences           : "2.0.0-RC3",
+
+        /**
+         * Network
+         */
+        retrofit                : "2.3.0",
+        okhttp                  : "3.9.1",
+
+        /**
+         * Picasso
+         */
+        picasso                 : "2.5.2",
+
+        /**
+         * Injection
+         */
+        dagger                  : "2.14.1",
+
+        /**
+         * Gson
+         */
+        gson                    : "2.8.2",
+
+        /**
+         * Facebook
+         */
+        facebook                : "4.30.0",
+
+        /**
+         * Testing
+         */
+        junit                   : "4.12",
+        mockito                 : "2.8.9",
+        powermock               : "1.7.3",
+        testRunner              : "1.0.1",
+        espresso                : "3.0.1"
+]

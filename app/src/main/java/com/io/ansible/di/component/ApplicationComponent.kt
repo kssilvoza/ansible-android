@@ -11,6 +11,7 @@ import javax.inject.Singleton
 /**
  * Created by kimsilvozahome on 15/01/2018.
  */
+// TODO - Add scoping for modules
 @Singleton
 @Component(modules = [
     AndroidSupportInjectionModule::class,

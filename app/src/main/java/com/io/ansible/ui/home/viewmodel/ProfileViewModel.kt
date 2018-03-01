@@ -13,41 +13,39 @@ import javax.inject.Inject
 /**
  * Created by kimsilvozahome on 08/02/2018.
  */
-class ProfileViewModel @Inject constructor(profileStore: ProfileStore) : ViewModel() {
-    private val mProfileStore = profileStore
+class ProfileViewModel @Inject constructor(private val profileStore: ProfileStore) : ViewModel() {
+    private val compositeDisposable = CompositeDisposable()
 
-    private val mCompositeDisposable = CompositeDisposable()
-
-    var mProfilePublishSubject : PublishSubject<Profile> = PublishSubject.create()
+    var profilePublishSubject: PublishSubject<Profile> = PublishSubject.create()
         private set
-    var mSpielPublishSubject : PublishSubject<Int> = PublishSubject.create()
+    var spielPublishSubject: PublishSubject<Int> = PublishSubject.create()
         private set
 
     init {
-        mCompositeDisposable.add(mProfileStore.observeProfile().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onGetProfileSuccess))
-        mCompositeDisposable.add(mProfileStore.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onAnsibleError))
+        compositeDisposable.add(profileStore.observeProfile().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onGetProfileSuccess))
+        compositeDisposable.add(profileStore.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onAnsibleError))
     }
 
     override fun onCleared() {
         super.onCleared()
-        mCompositeDisposable.clear()
-        mCompositeDisposable.dispose()
+        compositeDisposable.clear()
+        compositeDisposable.dispose()
     }
 
     fun getProfile() {
-        mProfileStore.getProfile()
+        profileStore.getProfile()
     }
 
     private fun onGetProfileSuccess(profile: Profile) {
-        mProfilePublishSubject.onNext(profile)
+        profilePublishSubject.onNext(profile)
     }
 
     private fun onAnsibleError(ansibleError: AnsibleError) {
         when {
             ansibleError.kind == AnsibleError.Kind.NETWORK ->
-                mSpielPublishSubject.onNext(SignInViewModel.SPIEL_NETWORK_ERROR)
+                spielPublishSubject.onNext(SignInViewModel.SPIEL_NETWORK_ERROR)
             else ->
-                mSpielPublishSubject.onNext(SignInViewModel.SPIEL_DEFAULT_ERROR)
+                spielPublishSubject.onNext(SignInViewModel.SPIEL_DEFAULT_ERROR)
         }
     }
 }

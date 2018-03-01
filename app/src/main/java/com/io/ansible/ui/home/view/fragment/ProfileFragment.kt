@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,11 +36,13 @@ class ProfileFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        return view
     }
 
     override fun onStart() {
         super.onStart()
+        viewModel.getProfile()
         startObserving()
     }
 
@@ -50,11 +53,10 @@ class ProfileFragment: Fragment() {
 
     private fun initializeViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel::class.java)
-        viewModel.getProfile()
     }
 
     private fun startObserving() {
-        compositeDisposable.add(viewModel.mProfilePublishSubject.observeOn(AndroidSchedulers.mainThread()).subscribe(this::onProfileChange))
+        compositeDisposable.add(viewModel.profilePublishSubject.observeOn(AndroidSchedulers.mainThread()).subscribe(this::onProfileChange))
     }
 
     private fun stopObserving() {

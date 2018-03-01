@@ -11,12 +11,7 @@ import java.io.IOException
  * Created by kimsilvozahome on 15/01/2018.
  */
 abstract class BaseStore<T> {
-    protected val mResponsePublishSubject: PublishSubject<T> = PublishSubject.create()
     protected val mErrorPublishSubject: PublishSubject<AnsibleError> = PublishSubject.create()
-
-    fun observeResponse(): Observable<T> {
-        return mResponsePublishSubject
-    }
 
     fun observeError(): Observable<AnsibleError> {
         return mErrorPublishSubject

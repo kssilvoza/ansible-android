@@ -15,13 +15,13 @@ import retrofit2.http.Query
 interface AuthApi {
     @Headers("Authorization: " + BuildConfig.AUTHORIZATION)
     @GET("/v1/auth/token?type=facebook")
-    fun exchangeFacebookToken(@Query("access_token") accessToken : String) : Single<AuthTokens>
+    fun exchangeFacebookToken(@Query("access_token") accessToken: String) : Single<AuthTokens>
 
     @Headers("Authorization: " + BuildConfig.AUTHORIZATION)
     @GET("/v1/auth/token?type=twitter")
-    fun exchangeTwitterToken(@Query("access_token") accessToken : String, @Query("access_token_secret") accessTokenSecret : String) : Single<AuthTokens>
+    fun exchangeTwitterToken(@Query("access_token") accessToken: String, @Query("access_token_secret") accessTokenSecret: String): Single<AuthTokens>
 
     @Headers("Authorization: " + BuildConfig.AUTHORIZATION)
     @GET("/v1/auth/token?type=refresh")
-    fun refreshToken(@Query("token") token : String) : Call<AuthTokens>
+    fun refreshToken(@Query("token") token: String): Call<AuthTokens>
 }

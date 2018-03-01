@@ -1,5 +1,6 @@
 package com.io.ansible.di.module
 
+import com.io.ansible.data.database.dao.ContactDao
 import com.io.ansible.network.ansible.api.AuthApi
 import com.io.ansible.data.preference.Preferences
 import com.io.ansible.data.store.ContactStore
@@ -30,7 +31,7 @@ class StoreModule {
 
     @Provides
     @Singleton
-    fun provideContactStore(contactApi: ContactApi): ContactStore {
-        return ContactStore(contactApi)
+    fun provideContactStore(contactApi: ContactApi, contactDao: ContactDao, preferences: Preferences): ContactStore {
+        return ContactStore(contactApi, contactDao, preferences)
     }
 }

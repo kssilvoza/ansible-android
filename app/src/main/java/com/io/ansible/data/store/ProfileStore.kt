@@ -23,7 +23,7 @@ class ProfileStore(private val profileApi: ProfileApi, private val preferences: 
     }
 
     private fun onGetProfileSuccess(profile: Profile) {
+        preferences.profilePreference.delete()
         preferences.profilePreference.set(profile)
-        mResponsePublishSubject.onNext(profile)
     }
 }

@@ -31,6 +31,5 @@ class TokenStore(private val authApi: AuthApi, private val preferences: Preferen
 
     private fun onGetTokenSuccess(authTokens: AuthTokens) {
         preferences.authTokensPreference.set(authTokens)
-        mResponsePublishSubject.onNext(authTokens)
     }
 }
