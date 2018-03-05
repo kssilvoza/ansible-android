@@ -10,8 +10,8 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by kimsilvozahome on 06/02/2018.
  */
-class ProfileStore(private val profileApi: ProfileApi, private val preferences: Preferences) : BaseStore<Profile>() {
-    fun observeProfile() : Observable<Profile> {
+class ProfileStore(private val profileApi: ProfileApi, private val preferences: Preferences): BaseStore<Profile>() {
+    fun observeProfile(): Observable<Profile> {
         return preferences.profilePreference.asObservable()
     }
 
