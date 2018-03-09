@@ -1,9 +1,11 @@
 package com.io.ansible.ui.home.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.io.ansible.R
+import com.io.ansible.messaging.XmppService
 import com.io.ansible.ui.home.view.adapter.HomePagerAdapter
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -21,6 +23,7 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         initializeViewPager()
+        startXmppService()
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
@@ -32,5 +35,9 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
         view_pager.adapter = homePagerAdapter
         view_pager.offscreenPageLimit = 2
         view_pager.currentItem = 0
+    }
+
+    private fun startXmppService() {
+        startService(Intent(this, XmppService::class.java))
     }
 }

@@ -51,9 +51,9 @@ class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : 
     }
 
     companion object {
-        val SPIEL_NETWORK_ERROR = 100
-        val SPIEL_DEFAULT_ERROR = 101
+        const val SPIEL_NETWORK_ERROR = 100
+        const val SPIEL_DEFAULT_ERROR = 101
 
-        val FLOW_TO_HOME_ACTIVITY = 1
+        const val FLOW_TO_HOME_ACTIVITY = 1
     }
 }

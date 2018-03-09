@@ -10,7 +10,7 @@ ext.dependencyVersions = [
         /**
          * Kotlin libraries
          */
-        ktx                     : "0.1",
+        ktx                     : "0.2",
 
         /**
          * Support libraries
@@ -61,6 +61,11 @@ ext.dependencyVersions = [
          * Facebook
          */
         facebook                : "4.30.0",
+
+        /**
+         * Smack
+         */
+        smack                   : "4.2.0",
 
         /**
          * Testing

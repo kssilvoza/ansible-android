@@ -120,6 +120,12 @@ dependencies {
     implementation "com.facebook.android:facebook-android-sdk:$dependencyVersions.facebook"
 
     /**
+     * Smack
+     */
+    implementation "org.igniterealtime.smack:smack-android-extensions:$dependencyVersions.smack"
+    implementation "org.igniterealtime.smack:smack-tcp:$dependencyVersions.smack"
+
+    /**
      * Testing
      */
     testImplementation "junit:junit:$dependencyVersions.junit"
