@@ -8,8 +8,14 @@ import com.io.ansible.BuildConfig
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.ConnectionListener
 import org.jivesoftware.smack.XMPPConnection
+import org.jivesoftware.smack.chat2.Chat
+import org.jivesoftware.smack.chat2.ChatManager
+import org.jivesoftware.smack.packet.Message
+import org.jivesoftware.smack.packet.Stanza
 import org.jivesoftware.smack.tcp.XMPPTCPConnection
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration
+import org.jxmpp.jid.EntityBareJid
+import org.jxmpp.jid.impl.JidCreate
 import java.lang.Exception
 import java.net.InetAddress
 import javax.net.ssl.HostnameVerifier
@@ -21,10 +27,12 @@ import javax.net.ssl.SSLSession
  */
 class XmppService: Service() {
     private lateinit var xmppConnection : XMPPTCPConnection
+    private lateinit var chatManager: ChatManager
 
     override fun onCreate() {
         super.onCreate()
-        configureConnection("192.168.44.217", 5222, "10.100.216.71")
+        // Host may change. Check network settings to see host
+        configureConnection(HOST, PORT, XMPP_DOMAIN)
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -47,16 +55,24 @@ class XmppService: Service() {
                 .setXmppDomain(xmppDomain)
                 .setSendPresence(true)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-//                .setSocketFactory(DummySSLSocketFactory())
                 .setDebuggerEnabled(BuildConfig.DEBUG)
                 .build();
 
         xmppConnection = XMPPTCPConnection(configuration)
         xmppConnection.addConnectionListener(connectionListener)
+        xmppConnection.addSyncStanzaListener(this::processStanza, this::acceptStanza)
+
+        chatManager = ChatManager.getInstanceFor(xmppConnection)
+        chatManager.addIncomingListener(this::onIncomingChat)
 
         Thread {
             xmppConnection.connect()
             xmppConnection.login("user1", "qwertyuiop")
+            val jid = JidCreate.entityBareFrom("user2@$XMPP_DOMAIN")
+            val chat = chatManager.chatWith(jid)
+            val message = Message(jid, Message.Type.chat)
+            message.body = "Hello Friend"
+            chat.send(message)
         }.start()
     }
 
@@ -86,7 +102,27 @@ class XmppService: Service() {
         }
     }
 
+    private fun processStanza(stanza: Stanza) {
+        Log.d(TAG, "Stanza: ${stanza.toXML()}")
+    }
+
+    private fun acceptStanza(stanza: Stanza): Boolean {
+        return true
+    }
+
+    private fun onIncomingChat(from: EntityBareJid, message: Message, chat: Chat) {
+        Log.d(TAG, "*****Incoming Chat*****")
+        Log.d(TAG, "From: $from")
+        Log.d(TAG, "Message: ${message.body}")
+        Log.d(TAG, "Message From: ${message.from}")
+        Log.d(TAG, "Chat: $chat")
+    }
+
     companion object {
         private const val TAG = "XmppService"
+
+        private const val HOST = "192.168.44.217"
+        private const val PORT = 5222
+        private const val XMPP_DOMAIN = "10.100.216.71"
     }
 }

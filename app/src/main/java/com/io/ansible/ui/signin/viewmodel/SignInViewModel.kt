@@ -21,8 +21,8 @@ class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : 
         private set
 
     init {
-        compositeDisposable.add(this.tokenStore.observeAuthTokens().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onGetTokenSuccess))
-        compositeDisposable.add(this.tokenStore.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onAnsibleError))
+        compositeDisposable.add(tokenStore.observeAuthTokens().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onGetTokenSuccess))
+        compositeDisposable.add(tokenStore.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onAnsibleError))
     }
 
     override fun onCleared() {
