@@ -6,6 +6,7 @@ import com.io.ansible.network.ansible.model.AnsibleError
 import com.io.ansible.network.ansible.model.AuthTokens
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -21,8 +22,11 @@ class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : 
         private set
 
     init {
-        compositeDisposable.add(tokenStore.observeAuthTokens().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onGetTokenSuccess))
-        compositeDisposable.add(tokenStore.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onAnsibleError))
+        compositeDisposable.add(
+                tokenStore.observeAuthTokens()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::onGetTokenSuccess))
     }
 
     override fun onCleared() {
@@ -32,7 +36,12 @@ class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : 
     }
 
     fun exchangeFacebookToken(token: String) {
-        tokenStore.exchangeFacebookToken(token)
+        compositeDisposable.add(
+                tokenStore.exchangeFacebookToken(token)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnError { onAnsibleError(AnsibleError(it)) }
+                        .subscribe())
     }
 
     fun onGetTokenSuccess(authTokens: AuthTokens) {

@@ -2,11 +2,13 @@ package com.io.ansible.ui.home.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import com.io.ansible.data.store.ProfileStore
+import com.io.ansible.messaging.MessageBus
 import com.io.ansible.network.ansible.model.AnsibleError
 import com.io.ansible.network.ansible.model.Profile
 import com.io.ansible.ui.signin.viewmodel.SignInViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -22,8 +24,11 @@ class ProfileViewModel @Inject constructor(private val profileStore: ProfileStor
         private set
 
     init {
-        compositeDisposable.add(profileStore.observeProfile().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onGetProfileSuccess))
-        compositeDisposable.add(profileStore.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onAnsibleError))
+        compositeDisposable.add(
+                profileStore.observeProfile()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::onGetProfileSuccess))
     }
 
     override fun onCleared() {
@@ -33,7 +38,16 @@ class ProfileViewModel @Inject constructor(private val profileStore: ProfileStor
     }
 
     fun getProfile() {
-        profileStore.getProfile()
+        compositeDisposable.add(
+                profileStore.getProfile()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnError { onAnsibleError(AnsibleError(it)) }
+                        .subscribe())
+    }
+
+    fun logInToXmpp(username: String, password: String) {
+        MessageBus.logIn(username, password)
     }
 
     private fun onGetProfileSuccess(profile: Profile) {

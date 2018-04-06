@@ -1,5 +1,6 @@
 package com.io.ansible.di.component
 
+import android.app.Service
 import com.io.ansible.AnsibleApplication
 import com.io.ansible.di.module.*
 import dagger.BindsInstance
@@ -15,12 +16,13 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AndroidSupportInjectionModule::class,
-    ActivityBuilder::class,
+    ActivityBuilderModule::class,
     ApiModule::class,
     ApplicationModule::class,
     DataModule::class,
     InterceptorModule::class,
     NetworkModule::class,
+//    ServiceBuilderModule::class,
     StoreModule::class,
     UiModule::class
 ])

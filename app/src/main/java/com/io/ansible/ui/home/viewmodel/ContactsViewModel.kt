@@ -6,6 +6,7 @@ import com.io.ansible.data.store.ContactStore
 import com.io.ansible.network.ansible.model.AnsibleError
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ class ContactsViewModel @Inject constructor(private val contactStore: ContactSto
     init {
         compositeDisposable.add(
                 contactStore.observeContacts()
+                        .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onGetContactsSuccess))
     }
@@ -34,6 +36,7 @@ class ContactsViewModel @Inject constructor(private val contactStore: ContactSto
     fun refreshContacts() {
         compositeDisposable.add(
                 contactStore.refreshContacts()
+                        .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnError { onGetContactsError(AnsibleError(it)) }
                         .subscribe())

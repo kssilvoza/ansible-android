@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.io.ansible.BuildConfig
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.ConnectionListener
 import org.jivesoftware.smack.XMPPConnection
@@ -21,7 +24,6 @@ import java.net.InetAddress
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLSession
 
-
 /**
  * Created by kimsilvozahome on 05/03/2018.
  */
@@ -29,17 +31,25 @@ class XmppService: Service() {
     private lateinit var xmppConnection : XMPPTCPConnection
     private lateinit var chatManager: ChatManager
 
+    private lateinit var disposable: Disposable
+
     override fun onCreate() {
         super.onCreate()
         // Host may change. Check network settings to see host
-        configureConnection(HOST, PORT, XMPP_DOMAIN)
+        initializeConnection(HOST, PORT, XMPP_DOMAIN)
+        startObserving()
     }
 
     override fun onBind(intent: Intent?): IBinder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun configureConnection(host: String, port: Int, xmppDomain: String) {
+    override fun onDestroy() {
+        super.onDestroy()
+        stopObserving()
+    }
+
+    private fun initializeConnection(host: String, port: Int, xmppDomain: String) {
         Log.d(TAG, "Configure Connection")
         val address = InetAddress.getByName(host)
         val verifier = object : HostnameVerifier {
@@ -63,20 +73,25 @@ class XmppService: Service() {
         xmppConnection.addSyncStanzaListener(this::processStanza, this::acceptStanza)
 
         chatManager = ChatManager.getInstanceFor(xmppConnection)
-        chatManager.addIncomingListener(this::onIncomingChat)
+        chatManager.addIncomingListener(this::onIncomingChatMessage)
 
         Thread {
             xmppConnection.connect()
-            xmppConnection.login("user1", "qwertyuiop")
-            val jid = JidCreate.entityBareFrom("user2@$XMPP_DOMAIN")
-            val chat = chatManager.chatWith(jid)
-            val message = Message(jid, Message.Type.chat)
-            message.body = "Hello Friend"
-            chat.send(message)
         }.start()
     }
 
-    val connectionListener = object : ConnectionListener {
+    private fun startObserving() {
+        disposable = MessageBus.requestPublishSubject
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onRequestReceived)
+    }
+
+    private fun stopObserving() {
+        disposable.dispose()
+    }
+
+    private val connectionListener = object : ConnectionListener {
         override fun connected(connection: XMPPConnection?) {
             Log.d(TAG, "Connected")
         }
@@ -110,7 +125,36 @@ class XmppService: Service() {
         return true
     }
 
-    private fun onIncomingChat(from: EntityBareJid, message: Message, chat: Chat) {
+    private fun onRequestReceived(messageRequest: MessageRequest) {
+        val payload = messageRequest.payload
+        when(messageRequest.type) {
+            MessageRequest.TYPE_LOG_IN -> {
+                if (payload is LogInPayload) {
+                    logIn(payload.username, payload.password)
+                }
+            }
+            MessageRequest.TYPE_SEND_CHAT_MESSAGE -> {
+            }
+        }
+    }
+
+    private fun logIn(username: String, password: String) {
+        Thread {
+            xmppConnection.login(username, password)
+        }.start()
+    }
+
+    private fun sendChatMessage(username: String, messageBody: String) {
+        Thread {
+            val jid = JidCreate.entityBareFrom("$username@$XMPP_DOMAIN")
+            val chat = chatManager.chatWith(jid)
+            val message = Message(jid, Message.Type.chat)
+            message.body = messageBody
+            chat.send(message)
+        }.start()
+    }
+
+    private fun onIncomingChatMessage(from: EntityBareJid, message: Message, chat: Chat) {
         Log.d(TAG, "*****Incoming Chat*****")
         Log.d(TAG, "From: $from")
         Log.d(TAG, "Message: ${message.body}")
@@ -121,7 +165,7 @@ class XmppService: Service() {
     companion object {
         private const val TAG = "XmppService"
 
-        private const val HOST = "192.168.44.217"
+        private const val HOST = "10.100.216.125"
         private const val PORT = 5222
         private const val XMPP_DOMAIN = "10.100.216.71"
     }

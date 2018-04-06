@@ -1,6 +1,5 @@
 package com.io.ansible.ui.home.view.adapter
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +21,8 @@ class ContactsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as ViewHolder).bind(contactEntities.get(position))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        (holder as ViewHolder).bind(contactEntities[position])
     }
 
     override fun getItemCount(): Int = contactEntities.size

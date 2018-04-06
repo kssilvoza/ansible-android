@@ -6,7 +6,6 @@ import com.io.ansible.data.preference.Preferences
 import com.io.ansible.network.ansible.api.ContactApi
 import com.io.ansible.network.ansible.model.GetContactsResponse
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,29 +16,26 @@ import io.reactivex.schedulers.Schedulers
 class ContactStore(
         private val contactApi: ContactApi,
         private val contactDao: ContactDao,
-        private val preferences: Preferences): BaseStore<List<ContactEntity>>() {
+        private val preferences: Preferences) {
     fun observeContacts(): Flowable<List<ContactEntity>> {
         return contactDao.getAll()
     }
 
     fun refreshContacts(): Single<GetContactsResponse> {
-        return contactApi.getContacts()
-                .doOnSuccess(this::refreshContactsSuccess)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+        return contactApi.getContacts().doOnSuccess(this::onRefreshContactsSuccess)
     }
 
     fun loadMoreContacts(): Single<GetContactsResponse> {
-        return contactApi.getContacts(preferences.contactPaginationPreference.get().after)
-                .doOnSuccess(this::getContactsSuccess)
+        val after = preferences.contactPaginationPreference.get().after
+        return contactApi.getContacts(after).doOnSuccess(this::onGetContactsSuccess)
     }
 
-    private fun refreshContactsSuccess(getContactsResponse: GetContactsResponse) {
+    private fun onRefreshContactsSuccess(getContactsResponse: GetContactsResponse) {
         contactDao.deleteAll()
-        getContactsSuccess(getContactsResponse)
+        onGetContactsSuccess(getContactsResponse)
     }
 
-    private fun getContactsSuccess(getContactsResponse: GetContactsResponse) {
+    private fun onGetContactsSuccess(getContactsResponse: GetContactsResponse) {
         preferences.contactPaginationPreference.set(getContactsResponse.pagination)
         val contactEntities = mutableListOf<ContactEntity>()
         for (contact in getContactsResponse.contacts) {

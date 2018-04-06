@@ -11,7 +11,7 @@ import dagger.android.ContributesAndroidInjector
  * Created by kimsilvozahome on 21/02/2018.
  */
 @Module
-abstract class ActivityBuilder {
+abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [SignInModule::class])
     abstract fun contributeSignInActivityInjector(): SignInActivity
 

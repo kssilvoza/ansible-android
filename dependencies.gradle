@@ -15,19 +15,19 @@ ext.dependencyVersions = [
         /**
          * Support libraries
          */
-        support                 : "27.0.2",
+        support                 : "27.1.0",
         supportConstraintLayout : "1.0.2",
 
         /**
          * Lifecycle
          */
-        lifecycle               : "1.1.0",
+        lifecycle               : "1.1.1",
 
         /**
          * Room
          */
-        room                    : "1.1.0-alpha2",
-        roomRxJava2             : "1.1.0-alpha1",
+        room                    : "1.1.0-alpha3",
+        roomRxJava2             : "1.1.0-alpha3",
 
         /**
          * RxJava
@@ -39,7 +39,7 @@ ext.dependencyVersions = [
         /**
          * Network
          */
-        retrofit                : "2.3.0",
+        retrofit                : "2.4.0",
         okhttp                  : "3.9.1",
 
         /**
@@ -60,7 +60,7 @@ ext.dependencyVersions = [
         /**
          * Facebook
          */
-        facebook                : "4.30.0",
+        facebook                : "4.31.0",
 
         /**
          * Smack
