@@ -12,7 +12,6 @@ import com.io.ansible.network.ansible.model.Contact
 data class ContactEntity(
         @PrimaryKey var id: String,
         @ColumnInfo(name = "display_name") var displayName: String,
-        @ColumnInfo(name = "image_url") var imageUrl: String
-) {
+        @ColumnInfo(name = "image_url") var imageUrl: String) {
     constructor(contact: Contact) : this(contact.id, contact.displayName, contact.imageUrl)
 }

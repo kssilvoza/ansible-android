@@ -16,9 +16,9 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
-    var spielPublishSubject: PublishSubject<Int> = PublishSubject.create()
+    var spielPublishSubject = PublishSubject.create<Int>()
         private set
-    var flowPublishSubject: PublishSubject<Int> = PublishSubject.create()
+    var flowPublishSubject = PublishSubject.create<Int>()
         private set
 
     init {

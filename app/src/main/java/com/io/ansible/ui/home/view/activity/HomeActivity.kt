@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.io.ansible.R
-import com.io.ansible.messaging.XmppService
+import com.io.ansible.message.XmppService
 import com.io.ansible.ui.home.view.adapter.HomePagerAdapter
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector

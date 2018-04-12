@@ -1,4 +1,4 @@
-package com.io.ansible.messaging
+package com.io.ansible.message
 
 import com.io.ansible.data.database.entity.ContactEntity
 import io.reactivex.subjects.PublishSubject

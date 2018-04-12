@@ -14,8 +14,5 @@
     <string name="label_sign_in_facebook">Sign In Via Facebook</string>
     <string name="label_sign_in_twitter">Sign In Via Twitter</string>
 
-    <string name="label_log_in_to_xmpp">Log in to XMPP</string>
-
-    <string name="hint_username">Username</string>
-    <string name="hint_password">Password</string>
+    <string name="label_send">Send</string>
 </resources>

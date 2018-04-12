@@ -23,6 +23,8 @@
 
         <activity android:name=".ui.home.view.activity.HomeActivity"/>
 
+        <activity android:name=".ui.messagethread.view.activity.MessageThreadActivity"/>
+
         <!--Facebook-->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -32,7 +34,7 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"/>
 
-        <service android:name=".messaging.XmppService"/>
+        <service android:name=".message.XmppService"/>
     </application>
 
 </manifest>

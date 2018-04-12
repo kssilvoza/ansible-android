@@ -1,8 +1,9 @@
-package com.io.ansible.messaging
+package com.io.ansible.message
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.text.TextUtils
 import android.util.Log
 import com.io.ansible.BuildConfig
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -10,6 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.jivesoftware.smack.ConnectionConfiguration
 import org.jivesoftware.smack.ConnectionListener
+import org.jivesoftware.smack.SmackException
 import org.jivesoftware.smack.XMPPConnection
 import org.jivesoftware.smack.chat2.Chat
 import org.jivesoftware.smack.chat2.ChatManager
@@ -140,7 +142,13 @@ class XmppService: Service() {
 
     private fun logIn(username: String, password: String) {
         Thread {
-            xmppConnection.login(username, password)
+            if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+                try {
+                    xmppConnection.login(username, password)
+                } catch (exception: SmackException.AlreadyLoggedInException) {
+                    connectionListener.authenticated(xmppConnection, true)
+                }
+            }
         }.start()
     }
 
@@ -165,7 +173,7 @@ class XmppService: Service() {
     companion object {
         private const val TAG = "XmppService"
 
-        private const val HOST = "10.100.216.125"
+        private const val HOST = "10.100.216.227"
         private const val PORT = 5222
         private const val XMPP_DOMAIN = "10.100.216.71"
     }

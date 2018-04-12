@@ -10,6 +10,7 @@
         android:id="@+id/imageview"
         android:layout_width="@dimen/large_icon_size"
         android:layout_height="@dimen/large_icon_size"
+        android:contentDescription="@null"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
@@ -21,39 +22,6 @@
         android:textSize="@dimen/text_size_standard"
         android:layout_marginTop="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/imageview"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <EditText
-        android:id="@+id/edittext_username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:textSize="@dimen/text_size_standard"
-        android:inputType="text"
-        android:hint="@string/hint_username"
-        app:layout_constraintTop_toBottomOf="@id/textview_name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <EditText
-        android:id="@+id/edittext_password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_standard"
-        android:inputType="textPassword"
-        android:hint="@string/hint_password"
-        app:layout_constraintTop_toBottomOf="@id/edittext_username"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-    
-    <Button
-        android:id="@+id/button_log_in_to_xmpp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:text="@string/label_log_in_to_xmpp"
-        app:layout_constraintTop_toBottomOf="@id/edittext_password"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

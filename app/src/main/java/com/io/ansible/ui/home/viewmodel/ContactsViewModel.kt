@@ -14,10 +14,13 @@ import javax.inject.Inject
  * Created by kimsilvozahome on 21/02/2018.
  */
 class ContactsViewModel @Inject constructor(private val contactStore: ContactStore): ViewModel() {
+    lateinit var clickedContactEntity: ContactEntity
+
     private val compositeDisposable = CompositeDisposable()
 
-    var contactsPublishSubject: PublishSubject<List<ContactEntity>> = PublishSubject.create()
+    var contactsPublishSubject = PublishSubject.create<List<ContactEntity>>()
         private set
+    var flowPublishSubject = PublishSubject.create<Pair<Int, Any>>()
 
     init {
         compositeDisposable.add(
@@ -29,7 +32,6 @@ class ContactsViewModel @Inject constructor(private val contactStore: ContactSto
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.clear()
         compositeDisposable.dispose()
     }
 
@@ -48,5 +50,14 @@ class ContactsViewModel @Inject constructor(private val contactStore: ContactSto
 
     private fun onGetContactsError(ansibleError: AnsibleError) {
 
+    }
+
+    fun onContactClicked(contactEntity: ContactEntity) {
+        clickedContactEntity = contactEntity
+        flowPublishSubject.onNext(Pair(FLOW_TO_MESSAGE_THREAD_ACTIVITY, contactEntity))
+    }
+
+    companion object {
+        const val FLOW_TO_MESSAGE_THREAD_ACTIVITY = 1
     }
 }

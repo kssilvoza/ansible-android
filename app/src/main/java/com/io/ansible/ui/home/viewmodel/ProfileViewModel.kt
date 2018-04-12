@@ -2,7 +2,7 @@ package com.io.ansible.ui.home.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import com.io.ansible.data.store.ProfileStore
-import com.io.ansible.messaging.MessageBus
+import com.io.ansible.message.MessageBus
 import com.io.ansible.network.ansible.model.AnsibleError
 import com.io.ansible.network.ansible.model.Profile
 import com.io.ansible.ui.signin.viewmodel.SignInViewModel
@@ -51,6 +51,8 @@ class ProfileViewModel @Inject constructor(private val profileStore: ProfileStor
     }
 
     private fun onGetProfileSuccess(profile: Profile) {
+        val id = profile.id
+        MessageBus.logIn(id, "password$id")
         profilePublishSubject.onNext(profile)
     }
 
@@ -61,5 +63,9 @@ class ProfileViewModel @Inject constructor(private val profileStore: ProfileStor
             else ->
                 spielPublishSubject.onNext(SignInViewModel.SPIEL_DEFAULT_ERROR)
         }
+    }
+
+    companion object {
+        private const val TAG = "ProfileViewModel"
     }
 }
