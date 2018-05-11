@@ -3,9 +3,10 @@
     <dimen name="padding_normal">16dp</dimen>
 
     <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_large">52dp</dimen>
 
     <dimen name="text_size_standard">14sp</dimen>
 
-    <dimen name="small_icon_size">36dp</dimen>
-    <dimen name="large_icon_size">88dp</dimen>
+    <dimen name="icon_size_small">36dp</dimen>
+    <dimen name="icon_size_large">88dp</dimen>
 </resources>

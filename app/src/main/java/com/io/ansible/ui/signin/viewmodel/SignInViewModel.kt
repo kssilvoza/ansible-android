@@ -14,12 +14,12 @@ import javax.inject.Inject
  * Created by kimsilvozahome on 15/01/2018.
  */
 class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable()
-
     var spielPublishSubject = PublishSubject.create<Int>()
         private set
     var flowPublishSubject = PublishSubject.create<Int>()
         private set
+
+    private val compositeDisposable = CompositeDisposable()
 
     init {
         compositeDisposable.add(

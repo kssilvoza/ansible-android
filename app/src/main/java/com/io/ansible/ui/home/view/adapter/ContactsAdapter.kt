@@ -53,6 +53,7 @@ class ContactsAdapter(private val onClickFunction: (contactEntity: ContactEntity
             itemView.layout.setOnClickListener {
                 onClickFunction(viewModel.contactEntity)
             }
+            bind()
         }
 
         fun bind() {

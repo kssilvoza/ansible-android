@@ -12,7 +12,10 @@ import io.reactivex.Flowable
 @Dao
 interface MessageDao {
     @Query("SELECT * FROM messages")
-    fun getAll(): Flowable<List<MessageEntity>>
+    fun get(): Flowable<List<MessageEntity>>
+
+    @Query("SELECT * FROM messages WHERE thread_id = :threadId")
+    fun get(threadId: String): Flowable<List<MessageEntity>>
 
     @Insert
     fun insert(messageEntity: MessageEntity)

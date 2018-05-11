@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageview"
-        android:layout_width="@dimen/large_icon_size"
-        android:layout_height="@dimen/large_icon_size"
+        android:layout_width="@dimen/icon_size_large"
+        android:layout_height="@dimen/icon_size_large"
         android:contentDescription="@null"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

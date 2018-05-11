@@ -12,6 +12,6 @@ data class Profile(@SerializedName("id") val id : String,
                    @SerializedName("image_url") val imageUrl : String,
                    @SerializedName("msisdn") val msisdn : String) {
     fun getName() : String {
-        return firstName + " " + lastName
+        return "$firstName $lastName"
     }
 }

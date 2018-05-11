@@ -16,12 +16,12 @@ import javax.inject.Inject
  * Created by kimsilvozahome on 08/02/2018.
  */
 class ProfileViewModel @Inject constructor(private val profileStore: ProfileStore) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable()
-
     var profilePublishSubject: PublishSubject<Profile> = PublishSubject.create()
         private set
     var spielPublishSubject: PublishSubject<Int> = PublishSubject.create()
         private set
+
+    private val compositeDisposable = CompositeDisposable()
 
     init {
         compositeDisposable.add(

@@ -16,18 +16,18 @@ import javax.inject.Inject
 class ContactsViewModel @Inject constructor(private val contactStore: ContactStore): ViewModel() {
     lateinit var clickedContactEntity: ContactEntity
 
-    private val compositeDisposable = CompositeDisposable()
-
     var contactsPublishSubject = PublishSubject.create<List<ContactEntity>>()
         private set
     var flowPublishSubject = PublishSubject.create<Pair<Int, Any>>()
+
+    private val compositeDisposable = CompositeDisposable()
 
     init {
         compositeDisposable.add(
                 contactStore.observeContacts()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::onGetContactsSuccess))
+                        .subscribe(this::onContactsChanged))
     }
 
     override fun onCleared() {
@@ -44,7 +44,7 @@ class ContactsViewModel @Inject constructor(private val contactStore: ContactSto
                         .subscribe())
     }
 
-    private fun onGetContactsSuccess(contactEntities: List<ContactEntity>) {
+    private fun onContactsChanged(contactEntities: List<ContactEntity>) {
         contactsPublishSubject.onNext(contactEntities)
     }
 

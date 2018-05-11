@@ -34,9 +34,9 @@ class SignInActivity : AppCompatActivity() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
-        AndroidInjection.inject(this)
         initializeViewModel()
         initializeButtons()
     }

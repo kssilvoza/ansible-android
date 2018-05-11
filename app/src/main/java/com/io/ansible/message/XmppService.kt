@@ -128,14 +128,18 @@ class XmppService: Service() {
     }
 
     private fun onRequestReceived(messageRequest: MessageRequest) {
-        val payload = messageRequest.payload
+        Log.d(TAG, "On Request Received: ${messageRequest.type}")
+        val payload = messageRequest.params
         when(messageRequest.type) {
             MessageRequest.TYPE_LOG_IN -> {
-                if (payload is LogInPayload) {
+                if (payload is LogInParams) {
                     logIn(payload.username, payload.password)
                 }
             }
             MessageRequest.TYPE_SEND_CHAT_MESSAGE -> {
+                if (payload is SendChatMessageParams) {
+                    sendChatMessage(payload.username, payload.messageBody)
+                }
             }
         }
     }
@@ -168,12 +172,13 @@ class XmppService: Service() {
         Log.d(TAG, "Message: ${message.body}")
         Log.d(TAG, "Message From: ${message.from}")
         Log.d(TAG, "Chat: $chat")
+        MessageBus.chatPublishSubject.onNext(Pair(from, message))
     }
 
     companion object {
         private const val TAG = "XmppService"
 
-        private const val HOST = "10.100.216.227"
+        private const val HOST = "10.100.217.76"
         private const val PORT = 5222
         private const val XMPP_DOMAIN = "10.100.216.71"
     }

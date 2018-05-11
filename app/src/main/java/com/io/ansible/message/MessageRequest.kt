@@ -5,7 +5,7 @@ package com.io.ansible.message
  */
 data class MessageRequest(
         val type: Int,
-        val payload: Any) {
+        val params: Any) {
     companion object {
         const val TYPE_LOG_IN = 1
         const val TYPE_SEND_CHAT_MESSAGE = 2
