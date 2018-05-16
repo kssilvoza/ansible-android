@@ -14,6 +14,11 @@ ext.dependencyVersions = [
         ktx                     : "0.3",
 
         /**
+         * Multidex libraries
+         */
+        multidex                : "1.0.3",
+
+        /**
          * Support libraries
          */
         support                 : "27.1.1",

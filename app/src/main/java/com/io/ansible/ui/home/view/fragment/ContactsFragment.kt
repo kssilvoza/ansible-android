@@ -68,7 +68,7 @@ class ContactsFragment : Fragment() {
     }
 
     private fun initializeRecyclerView(view: View) {
-        contactsAdapter = ContactsAdapter(this::onContactClicked)
+        contactsAdapter = ContactsAdapter(this, this::onContactClicked)
 
         view.recyclerview.layoutManager = LinearLayoutManager(this.context)
         view.recyclerview.adapter = contactsAdapter

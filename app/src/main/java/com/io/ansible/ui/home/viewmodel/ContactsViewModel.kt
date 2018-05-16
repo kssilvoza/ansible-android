@@ -49,7 +49,6 @@ class ContactsViewModel @Inject constructor(private val contactStore: ContactSto
     }
 
     private fun onGetContactsError(ansibleError: AnsibleError) {
-
     }
 
     fun onContactClicked(contactEntity: ContactEntity) {

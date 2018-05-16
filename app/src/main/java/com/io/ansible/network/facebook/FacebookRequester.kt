@@ -2,6 +2,7 @@ package com.io.ansible.network.facebook
 
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
+import android.util.Log
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -15,19 +16,19 @@ import io.reactivex.subjects.PublishSubject
  * Created by kimsilvozahome on 02/02/2018.
  */
 class FacebookRequester(fragmentActivity: FragmentActivity) {
-    private val mFragmentActivity = fragmentActivity
+    private val fragmentActivity = fragmentActivity
 
-    private val mCallbackManager: CallbackManager
+    private val callbackManager: CallbackManager
 
-    private val mTokenSubject: PublishSubject<String> = PublishSubject.create()
-    private val mErrorSubject: PublishSubject<String> = PublishSubject.create()
+    private val tokenSubject: PublishSubject<String> = PublishSubject.create()
+    private val errorSubject: PublishSubject<String> = PublishSubject.create()
 
     init {
-        mCallbackManager = CallbackManager.Factory.create()
-        LoginManager.getInstance().registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
                 if (result.accessToken?.token != null) {
-                    mTokenSubject.onNext(result.accessToken.token)
+                    tokenSubject.onNext(result.accessToken.token)
                 }
             }
 
@@ -35,25 +36,25 @@ class FacebookRequester(fragmentActivity: FragmentActivity) {
             }
 
             override fun onError(error: FacebookException?) {
-                mErrorSubject.onNext("Error")
+                errorSubject.onNext("Error")
             }
         })
     }
 
     fun signIn() {
-        val permissions = mFragmentActivity.getResources().getStringArray(R.array.facebook_permissions)
-        LoginManager.getInstance().logInWithReadPermissions(mFragmentActivity, permissions.toMutableList())
+        val permissions = fragmentActivity.getResources().getStringArray(R.array.facebook_permissions)
+        LoginManager.getInstance().logInWithReadPermissions(fragmentActivity, permissions.toMutableList())
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     fun observeToken() : Observable<String> {
-        return mTokenSubject
+        return tokenSubject
     }
 
     fun observeError() : Observable<String> {
-        return mErrorSubject
+        return errorSubject
     }
 }

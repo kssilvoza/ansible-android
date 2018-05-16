@@ -3,6 +3,7 @@ package com.io.ansible
 import android.app.Activity
 import android.app.Application
 import android.app.Service
+import android.support.multidex.MultiDexApplication
 import com.io.ansible.di.component.DaggerApplicationComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -13,7 +14,7 @@ import javax.inject.Inject
 /**
  * Created by kimsilvozahome on 15/01/2018.
  */
-class AnsibleApplication : Application(), HasActivityInjector, HasServiceInjector {
+class AnsibleApplication : MultiDexApplication(), HasActivityInjector, HasServiceInjector {
     @Inject
     lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
     @Inject

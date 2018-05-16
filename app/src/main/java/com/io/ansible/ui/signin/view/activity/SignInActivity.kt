@@ -1,12 +1,12 @@
 package com.io.ansible.ui.signin.view.activity
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import com.io.ansible.R
 import com.io.ansible.common.flow.FlowController
@@ -27,11 +27,11 @@ class SignInActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var viewModel: SignInViewModel
+    private lateinit var viewModel: SignInViewModel
 
-    val facebookRequester: FacebookRequester = FacebookRequester(this)
+    private val facebookRequester: FacebookRequester = FacebookRequester(this)
 
-    val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -39,15 +39,11 @@ class SignInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sign_in)
         initializeViewModel()
         initializeButtons()
-    }
-
-    override fun onStart() {
-        super.onStart()
         startObserving()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         stopObserving()
     }
 
@@ -66,8 +62,9 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun startObserving() {
-        compositeDisposable.add(viewModel.flowPublishSubject.observeOn(AndroidSchedulers.mainThread()).subscribe(this::onFlowChange))
-        compositeDisposable.add(viewModel.spielPublishSubject.observeOn(AndroidSchedulers.mainThread()).subscribe(this::onSpielChange))
+        viewModel.flow.observe(this, Observer { onFlowChange(it) })
+        viewModel.spiel.observe(this, Observer { onSpielChange(it) })
+
         compositeDisposable.add(facebookRequester.observeToken().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onFacebookSignInSuccess))
         compositeDisposable.add(facebookRequester.observeError().observeOn(AndroidSchedulers.mainThread()).subscribe(this::onFacebookSignInError))
     }
@@ -92,20 +89,20 @@ class SignInActivity : AppCompatActivity() {
         onSpielChange(SignInViewModel.SPIEL_DEFAULT_ERROR)
     }
 
-    private fun onFlowChange(flow: Int) {
+    private fun onFlowChange(flow: Int?) {
         when (flow) {
             SignInViewModel.FLOW_TO_HOME_ACTIVITY ->
-                    flowController.flowToHomeActivity(this)
+                flowController.flowToHomeActivity(this)
         }
     }
 
-    private fun onSpielChange(spiel: Int) {
+    private fun onSpielChange(spiel: Int?) {
         val resId: Int
         when (spiel) {
             SignInViewModel.SPIEL_NETWORK_ERROR ->
-                    resId = R.string.spiel_network_error
+                resId = R.string.spiel_network_error
             else ->
-                    resId = R.string.spiel_default_error
+                resId = R.string.spiel_default_error
         }
         Snackbar.make(layout, resId, Snackbar.LENGTH_LONG).show()
     }

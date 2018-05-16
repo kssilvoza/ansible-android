@@ -1,5 +1,7 @@
 package com.io.ansible.ui.home.viewmodel
 
+import android.arch.lifecycle.MutableLiveData
+import com.facebook.internal.Mutable
 import com.io.ansible.data.database.entity.ContactEntity
 import io.reactivex.subjects.PublishSubject
 
@@ -7,12 +9,12 @@ import io.reactivex.subjects.PublishSubject
  * Created by kimsilvozahome on 10/04/2018.
  */
 class ContactsItemViewModel(val contactEntity: ContactEntity) {
-    val imagePublishSubject = PublishSubject.create<String>()
+    var image = MutableLiveData<String>()
 
-    val displayNamePublishSubject = PublishSubject.create<String>()
+    var displayName = MutableLiveData<String>()
 
     init {
-        imagePublishSubject.onNext(contactEntity.imageUrl)
-        displayNamePublishSubject.onNext(contactEntity.displayName)
+        image.value = contactEntity.imageUrl
+        displayName.value = contactEntity.displayName
     }
 }

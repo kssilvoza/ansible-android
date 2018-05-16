@@ -15,6 +15,7 @@ android {
         versionCode androidConfiguration.versionCode
         versionName androidConfiguration.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -61,6 +62,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$dependencyVersions.kotlin_coroutines"
     implementation "androidx.core:core-ktx:$dependencyVersions.ktx"
+
+    /**
+     * Multidex libraries
+     */
+    implementation "com.android.support:multidex:$dependencyVersions.multidex"
 
     /**
      * Support libraries
