@@ -62,7 +62,7 @@ class ProfileFragment: Fragment() {
     }
 
     private fun stopObserving() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
     private fun onProfileChange(profile: Profile) {

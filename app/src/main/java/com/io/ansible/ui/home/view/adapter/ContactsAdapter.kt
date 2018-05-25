@@ -15,13 +15,17 @@ import kotlinx.android.synthetic.main.item_contact.view.*
 /**
  * Created by kimsilvozahome on 23/02/2018.
  */
-class ContactsAdapter(private val lifecycleOwner: LifecycleOwner, private val onClickFunction: (contactEntity: ContactEntity) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+class ContactsAdapter(private val lifecycleOwner: LifecycleOwner, private val listener: ContactsAdapter.Listener) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
     private var contactEntities: List<ContactEntity> = mutableListOf()
+
+    interface Listener {
+        fun onClick(contactEntity: ContactEntity)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsAdapter.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.item_contact, parent, false)
-        return ViewHolder(view, lifecycleOwner, onClickFunction)
+        return ViewHolder(view, lifecycleOwner, listener)
     }
 
     override fun onBindViewHolder(holder: ContactsAdapter.ViewHolder, position: Int) {
@@ -35,7 +39,7 @@ class ContactsAdapter(private val lifecycleOwner: LifecycleOwner, private val on
         notifyDataSetChanged()
     }
 
-    class ViewHolder(itemView: View, private val lifecycleOwner: LifecycleOwner, private val onClickFunction: (contactEntity: ContactEntity) -> Unit): RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, private val lifecycleOwner: LifecycleOwner, private val listener: Listener): RecyclerView.ViewHolder(itemView) {
         private lateinit var viewModel : ContactsItemViewModel
 
         private var layout = itemView.layout
@@ -46,7 +50,7 @@ class ContactsAdapter(private val lifecycleOwner: LifecycleOwner, private val on
             this.viewModel = viewModel
 
             layout.setOnClickListener {
-                onClickFunction(viewModel.contactEntity)
+                listener.onClick(viewModel.contactEntity)
             }
 
             viewModel.image.observe(lifecycleOwner, Observer { showImage(it) })

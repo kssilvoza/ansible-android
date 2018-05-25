@@ -70,7 +70,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun stopObserving() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
     private fun onFacebookButtonClicked(view: View) {

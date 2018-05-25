@@ -30,7 +30,6 @@ class SignInViewModel @Inject constructor(private val tokenStore: TokenStore) : 
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.clear()
         compositeDisposable.dispose()
     }
 

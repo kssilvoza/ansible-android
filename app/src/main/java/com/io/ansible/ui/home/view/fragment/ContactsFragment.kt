@@ -68,8 +68,11 @@ class ContactsFragment : Fragment() {
     }
 
     private fun initializeRecyclerView(view: View) {
-        contactsAdapter = ContactsAdapter(this, this::onContactClicked)
-
+        contactsAdapter = ContactsAdapter(this, object : ContactsAdapter.Listener {
+            override fun onClick(contactEntity: ContactEntity) {
+                onContactClicked(contactEntity)
+            }
+        })
         view.recyclerview.layoutManager = LinearLayoutManager(this.context)
         view.recyclerview.adapter = contactsAdapter
     }
@@ -80,7 +83,7 @@ class ContactsFragment : Fragment() {
     }
 
     private fun stopObserving() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
     private fun onContactsChange(contactEntities: List<ContactEntity>) {
