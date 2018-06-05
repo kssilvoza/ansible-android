@@ -74,6 +74,11 @@ ext.dependencyVersions = [
         smack                   : "4.2.0",
 
         /**
+         * Stetho
+         */
+        stetho                  : "1.5.0",
+
+        /**
          * Testing
          */
         junit                   : "4.12",

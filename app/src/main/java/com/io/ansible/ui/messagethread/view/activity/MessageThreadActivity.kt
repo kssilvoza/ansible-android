@@ -4,8 +4,10 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import com.io.ansible.R
 import com.io.ansible.ui.messagethread.model.MessageThreadItem
+import com.io.ansible.ui.messagethread.view.adapter.MessageThreadAdapter
 import com.io.ansible.ui.messagethread.viewmodel.MessageThreadViewModel
 import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,7 +22,9 @@ class MessageThreadActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var viewModel: MessageThreadViewModel
+    private lateinit var messageThreadAdapter: MessageThreadAdapter
+
+    private lateinit var viewModel: MessageThreadViewModel
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -29,6 +33,7 @@ class MessageThreadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_thread)
         initializeViewModel()
+        initializeRecyclerView()
         initializeButtons()
     }
 
@@ -45,6 +50,12 @@ class MessageThreadActivity : AppCompatActivity() {
     private fun initializeViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MessageThreadViewModel::class.java)
         viewModel.setId(intent.getStringExtra(INTENT_EXTRA_ID))
+    }
+
+    private fun initializeRecyclerView() {
+        messageThreadAdapter = MessageThreadAdapter(this)
+        recyclerview.layoutManager = LinearLayoutManager(this)
+        recyclerview.adapter = messageThreadAdapter
     }
 
     private fun initializeButtons() {
@@ -73,7 +84,7 @@ class MessageThreadActivity : AppCompatActivity() {
     }
 
     private fun onMessageThreadItemsChanged(messageThreadItems: List<MessageThreadItem>) {
-
+        messageThreadAdapter.set(messageThreadItems)
     }
 
     companion object {

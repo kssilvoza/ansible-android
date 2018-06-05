@@ -6,6 +6,7 @@ import android.os.Message
 import com.io.ansible.data.database.Database
 import com.io.ansible.data.database.dao.ContactDao
 import com.io.ansible.data.database.dao.MessageDao
+import com.io.ansible.data.database.dao.MessageWithContactDao
 import com.io.ansible.data.preference.Preferences
 import dagger.Module
 import dagger.Provides
@@ -32,6 +33,12 @@ class DataModule {
     @Singleton
     fun provideMessageDao(database: Database): MessageDao {
         return database.messageDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMessageWithContactDao(database: Database): MessageWithContactDao {
+        return database.messageWithContactDao()
     }
 
     @Provides

@@ -1,9 +1,7 @@
 package com.io.ansible.ui.home.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
-import com.facebook.internal.Mutable
 import com.io.ansible.data.database.entity.ContactEntity
-import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by kimsilvozahome on 10/04/2018.

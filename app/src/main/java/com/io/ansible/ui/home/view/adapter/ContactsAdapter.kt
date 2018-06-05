@@ -23,8 +23,7 @@ class ContactsAdapter(private val lifecycleOwner: LifecycleOwner, private val li
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsAdapter.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_contact, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_contact, parent, false)
         return ViewHolder(view, lifecycleOwner, listener)
     }
 
@@ -42,31 +41,23 @@ class ContactsAdapter(private val lifecycleOwner: LifecycleOwner, private val li
     class ViewHolder(itemView: View, private val lifecycleOwner: LifecycleOwner, private val listener: Listener): RecyclerView.ViewHolder(itemView) {
         private lateinit var viewModel : ContactsItemViewModel
 
-        private var layout = itemView.layout
-        private var imageView = itemView.imageview
-        private var nameTextView = itemView.textview_name
-
         fun setViewModel(viewModel: ContactsItemViewModel) {
             this.viewModel = viewModel
 
-            layout.setOnClickListener {
+            itemView.setOnClickListener {
                 listener.onClick(viewModel.contactEntity)
             }
 
-            viewModel.image.observe(lifecycleOwner, Observer { showImage(it) })
-            viewModel.displayName.observe(lifecycleOwner, Observer { showDisplayName(it) })
+            viewModel.image.observe(lifecycleOwner, Observer { setImage(it) })
+            viewModel.displayName.observe(lifecycleOwner, Observer { setDisplayName(it) })
         }
 
-        fun showImage(imageUrl: String?) {
-            if (imageUrl != null) {
-                ImageUtility.loadCircleImage(itemView.context, imageUrl, imageView)
-            }
+        fun setImage(imageUrl: String?) {
+            ImageUtility.loadCircleImage(itemView.context, imageUrl, R.mipmap.ic_launcher_round, itemView.imageview)
         }
 
-        fun showDisplayName(displayName: String?) {
-            if (displayName != null) {
-                nameTextView.text = displayName
-            }
+        fun setDisplayName(displayName: String?) {
+            itemView.textview_name.text = displayName
         }
     }
 }

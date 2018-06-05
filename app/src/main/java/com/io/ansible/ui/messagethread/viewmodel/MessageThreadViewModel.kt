@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.io.ansible.common.utility.DateUtility
 import com.io.ansible.data.database.entity.ContactEntity
-import com.io.ansible.data.database.entity.MessageEntity
+import com.io.ansible.data.database.model.MessageWithContact
 import com.io.ansible.data.store.ContactStore
 import com.io.ansible.data.store.MessageStore
 import com.io.ansible.data.store.ProfileStore
@@ -62,11 +62,11 @@ class MessageThreadViewModel @Inject constructor(private val messageStore: Messa
         }
     }
 
-    private fun onMessagesChanged(messageEntities: List<MessageEntity>) {
-        Log.d("MessageThreadViewModel", "Message Entities Count: ${messageEntities.size}")
+    private fun onMessagesChanged(messagesWithContact: List<MessageWithContact>) {
+        Log.d("MessageThreadViewModel", "Count: ${messagesWithContact.size}")
         val messageThreadItems = ArrayList<MessageThreadItem>()
-        for (index in messageEntities.indices) {
-            val messageThreadItem = getMessageThreadItem(messageEntities, index)
+        for (index in messagesWithContact.indices) {
+            val messageThreadItem = getMessageThreadItem(messagesWithContact, index)
             Log.d("MessageThreadViewModel", messageThreadItem.toString())
             messageThreadItems.add(messageThreadItem)
         }
@@ -74,42 +74,53 @@ class MessageThreadViewModel @Inject constructor(private val messageStore: Messa
         messageThreadItemsPublishSubject.onNext(messageThreadItems)
     }
 
-    private fun getMessageThreadItem(messageEntities: List<MessageEntity>, index: Int) : MessageThreadItem {
+    private fun getMessageThreadItem(messagesWithContact: List<MessageWithContact>, index: Int) : MessageThreadItem {
         val messageThreadItem = MessageThreadItem()
 
-        val currentMessage = messageEntities[index]
-        val currentMessageDate = DateUtility.convertEpochToDate(currentMessage.timestamp)
-        messageThreadItem.date = currentMessageDate
+        val messageWithContact = messagesWithContact[index]
+
+        if (messageWithContact.from.isEmpty() && messageWithContact.messageEntity.from == profile.id) {
+            messageWithContact.from = mutableListOf(ContactEntity(profile.id, profile.getName(), profile.imageUrl))
+        }
 
         if (index == 0) {
             messageThreadItem.isDateShown = true
             messageThreadItem.isContactShown = true
         } else {
-            val previousMessage = messageEntities[index - 1]
-            val previousMessageDate = DateUtility.convertEpochToDate(previousMessage.timestamp)
+            val messageDate = DateUtility.convertEpochToDate(messageWithContact.messageEntity.timestamp)
 
-            if (currentMessageDate != previousMessageDate) {
+            val previousMessage = messagesWithContact[index - 1]
+            val previousMessageDate = DateUtility.convertEpochToDate(previousMessage.messageEntity.timestamp)
+
+            if (messageDate != previousMessageDate) {
                 messageThreadItem.isDateShown = true
             }
 
-            if (currentMessage.from != previousMessage.from) {
+            if (messageWithContact.from != previousMessage.from) {
                 messageThreadItem.isContactShown = true
             }
         }
 
-        val contact = contactsMap.get(currentMessage.from)
-        if (contact != null) {
-            messageThreadItem.contactImageUrl = contact.imageUrl
-            messageThreadItem.name = contact.displayName
-        } else if (profile.id == currentMessage.from) {
-            messageThreadItem.contactImageUrl = profile.imageUrl
-            messageThreadItem.name = profile.getName()
-        } else {
-            messageThreadItem.name = currentMessage.from
-        }
+        messageThreadItem.messageWithContact = messageWithContact
 
-        messageThreadItem.content = currentMessage.content
-        messageThreadItem.time = DateUtility.convertEpochToTime(currentMessage.timestamp)
+//        if (messageWithContact.from.isNotEmpty()) {
+//            messageThreadItem.contactImageUrl = messageWithContact.from[0].imageUrl
+//            messageThreadItem.name = messageWithContact.from[0].displayName
+//        }
+
+//        val contact = contactsMap[messageWithContact.from]
+//        if (contact != null) {
+//            messageThreadItem.contactImageUrl = contact.imageUrl
+//            messageThreadItem.name = contact.displayName
+//        } else if (profile.id == messageWithContact.from) {
+//            messageThreadItem.contactImageUrl = profile.imageUrl
+//            messageThreadItem.name = profile.getName()
+//        } else {
+//            messageThreadItem.name = messageWithContact.from
+//        }
+//
+//        messageThreadItem.content = messageWithContact.messageEntity.content
+//        messageThreadItem.time = DateUtility.convertEpochToTime(messageWithContact.messageEntity.timestamp)
 
         return messageThreadItem
     }

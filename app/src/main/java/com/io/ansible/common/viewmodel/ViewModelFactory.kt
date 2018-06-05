@@ -9,6 +9,12 @@ import javax.inject.Provider
  * Created by kimsilvozahome on 21/02/2018.
  */
 
+/*
+ * The java.lang.Class.isAssignableFrom() determines if
+ * the class or interface represented by this Class object
+ * is either the same as, or is a superclass or superinterface of,
+ * the class or interface represented by the specified Class parameter.
+ */
 class ViewModelFactory @Inject constructor(
         private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>)
     : ViewModelProvider.Factory {

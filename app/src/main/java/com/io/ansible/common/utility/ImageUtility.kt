@@ -10,11 +10,9 @@ import com.squareup.picasso.Picasso
  */
 class ImageUtility {
     companion object {
-        fun loadCircleImage(context: Context?, url: String, imageView: ImageView) {
-            if (url != "") {
-                Picasso.with(context).invalidate(url)
-                Picasso.with(context).load(url).transform(CircleTransform()).into(imageView)
-            }
+        fun loadCircleImage(context: Context?, url: String?, resId: Int, imageView: ImageView) {
+            Picasso.with(context).invalidate(url)
+            Picasso.with(context).load(url).placeholder(resId).transform(CircleTransform()).into(imageView)
         }
     }
 }

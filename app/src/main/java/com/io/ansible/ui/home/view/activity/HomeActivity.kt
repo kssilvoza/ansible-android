@@ -38,6 +38,6 @@ class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 
     private fun startXmppService() {
-        startService(Intent(this, XmppService::class.java))
+         startService(Intent(this, XmppService::class.java))
     }
 }

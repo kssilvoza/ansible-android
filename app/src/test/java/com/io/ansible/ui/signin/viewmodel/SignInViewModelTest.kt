@@ -1,5 +1,7 @@
 package com.io.ansible.ui.signin.viewmodel
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import android.arch.lifecycle.Observer
 import com.io.ansible.data.store.TokenStore
 import com.io.ansible.network.ansible.model.AnsibleError
 import com.io.ansible.network.ansible.model.AuthTokens
@@ -12,6 +14,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.powermock.modules.junit4.PowerMockRunner
 
@@ -22,11 +26,16 @@ import org.powermock.modules.junit4.PowerMockRunner
 @RunWith(PowerMockRunner::class)
 class SignInViewModelTest {
     @Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Rule
     @JvmField
     val rxImmediateSchedulerRule = RxImmediateSchedulerRule()
 
     @Mock
     private lateinit var tokenStore: TokenStore
+    @Mock
+    private lateinit var intObserver: Observer<Int>
 
     private lateinit var signInViewModel: SignInViewModel
 
@@ -41,10 +50,8 @@ class SignInViewModelTest {
         unexpectedAnsibleError = AnsibleError(null, null, null, AnsibleError.Kind.UNEXPECTED)
 
         val authTokensSubject: PublishSubject<AuthTokens> = PublishSubject.create()
-        val errorSubject: PublishSubject<AnsibleError> = PublishSubject.create()
 
         Mockito.`when`(tokenStore.observeAuthTokens()).thenReturn(authTokensSubject.startWith(successAuthTokens))
-        Mockito.`when`(tokenStore.observeError()).thenReturn(errorSubject.startWith(unexpectedAnsibleError))
 
         signInViewModel = SignInViewModel(tokenStore)
     }
@@ -59,36 +66,27 @@ class SignInViewModelTest {
 
     @Test
     fun onGetTokenSuccess_shouldFlowToHome() {
-        val testObserver = TestObserver<Int>()
-
-        signInViewModel.flowPublishSubject.subscribe(testObserver)
+        signInViewModel.flow.observeForever(intObserver)
         signInViewModel.onGetTokenSuccess(successAuthTokens)
 
-        testObserver.assertNoErrors()
-        testObserver.assertValue { flow -> flow == SignInViewModel.FLOW_TO_HOME_ACTIVITY}
+        assert(signInViewModel.flow.value == SignInViewModel.FLOW_TO_HOME_ACTIVITY)
     }
 
     @Test
     fun onAnsibleError_shouldShowNetworkErrorSpiel() {
         val ansibleError = AnsibleError(null, null, null, AnsibleError.Kind.NETWORK)
 
-        val testObserver = TestObserver<Int>()
-
-        signInViewModel.spielPublishSubject.subscribe(testObserver)
+        signInViewModel.spiel.observeForever(intObserver)
         signInViewModel.onAnsibleError(ansibleError)
 
-        testObserver.assertNoErrors()
-        testObserver.assertValue { spiel -> spiel == SignInViewModel.SPIEL_NETWORK_ERROR}
+        assert(signInViewModel.spiel.value == SignInViewModel.SPIEL_NETWORK_ERROR)
     }
 
     @Test
     fun onAnsibleError_shouldShowDefaultErrorSpiel() {
-        val testObserver = TestObserver<Int>()
-
-        signInViewModel.spielPublishSubject.subscribe(testObserver)
+        signInViewModel.spiel.observeForever(intObserver)
         signInViewModel.onAnsibleError(unexpectedAnsibleError)
 
-        testObserver.assertNoErrors()
-        testObserver.assertValue { spiel -> spiel == SignInViewModel.SPIEL_DEFAULT_ERROR}
+        assert(signInViewModel.spiel.value == SignInViewModel.SPIEL_DEFAULT_ERROR)
     }
 }

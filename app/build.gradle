@@ -137,6 +137,11 @@ dependencies {
     implementation "org.igniterealtime.smack:smack-tcp:$dependencyVersions.smack"
 
     /**
+     * Stetho
+     */
+    debugImplementation "com.facebook.stetho:stetho:$dependencyVersions.stetho"
+
+    /**
      * Testing
      */
     testImplementation "junit:junit:$dependencyVersions.junit"
@@ -144,6 +149,7 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$dependencyVersions.mockito"
     testImplementation "org.powermock:powermock-api-mockito2:$dependencyVersions.powermock"
     testImplementation "org.powermock:powermock-module-junit4:$dependencyVersions.powermock"
+    testImplementation "android.arch.core:core-testing:$dependencyVersions.lifecycle"
     androidTestImplementation "com.android.support.test:runner:$dependencyVersions.testRunner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$dependencyVersions.espresso"
 }

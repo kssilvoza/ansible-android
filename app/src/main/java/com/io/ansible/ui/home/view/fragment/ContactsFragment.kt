@@ -1,11 +1,9 @@
 package com.io.ansible.ui.home.view.fragment
 
-import android.app.Activity
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,24 +11,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.io.ansible.R
 import com.io.ansible.common.flow.FlowController
-import com.io.ansible.common.viewmodel.ViewModelFactory
 import com.io.ansible.data.database.entity.ContactEntity
 import com.io.ansible.ui.home.view.adapter.ContactsAdapter
 import com.io.ansible.ui.home.viewmodel.ContactsViewModel
-import com.io.ansible.ui.signin.viewmodel.SignInViewModel
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.fragment_contacts.view.*
+import javax.inject.Inject
 
 /**
  * Created by kimsilvozahome on 20/02/2018.
  */
 class ContactsFragment : Fragment() {
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var flowController: FlowController
 

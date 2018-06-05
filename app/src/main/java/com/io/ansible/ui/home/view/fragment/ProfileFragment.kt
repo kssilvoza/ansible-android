@@ -66,7 +66,7 @@ class ProfileFragment: Fragment() {
     }
 
     private fun onProfileChange(profile: Profile) {
-        ImageUtility.loadCircleImage(activity, profile.imageUrl, imageview)
+        ImageUtility.loadCircleImage(activity, profile.imageUrl, R.mipmap.ic_launcher_round, imageview)
         textview_name.text = profile.getName()
     }
 }

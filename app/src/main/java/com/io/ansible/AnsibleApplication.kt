@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.support.multidex.MultiDexApplication
+import com.facebook.stetho.Stetho
 import com.io.ansible.di.component.DaggerApplicationComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -22,7 +23,16 @@ class AnsibleApplication : MultiDexApplication(), HasActivityInjector, HasServic
 
     override fun onCreate() {
         super.onCreate()
+        initializeDagger()
+        initializeStetho()
+    }
+
+    private fun initializeDagger() {
         DaggerApplicationComponent.builder().application(this).build().inject(this)
+    }
+
+    private fun initializeStetho() {
+        Stetho.initializeWithDefaults(this);
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

@@ -2,6 +2,7 @@ package com.io.ansible.di.module
 
 import com.io.ansible.data.database.dao.ContactDao
 import com.io.ansible.data.database.dao.MessageDao
+import com.io.ansible.data.database.dao.MessageWithContactDao
 import com.io.ansible.network.ansible.api.AuthApi
 import com.io.ansible.data.preference.Preferences
 import com.io.ansible.data.store.ContactStore
@@ -39,7 +40,7 @@ class StoreModule {
 
     @Provides
     @Singleton
-    fun provideMessageStore(messageDao: MessageDao): MessageStore {
-        return MessageStore(messageDao)
+    fun provideMessageStore(messageDao: MessageDao, messageWithContactDao: MessageWithContactDao): MessageStore {
+        return MessageStore(messageDao, messageWithContactDao)
     }
 }

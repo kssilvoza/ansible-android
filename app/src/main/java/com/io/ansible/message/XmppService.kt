@@ -178,7 +178,7 @@ class XmppService: Service() {
     companion object {
         private const val TAG = "XmppService"
 
-        private const val HOST = "10.100.216.244"
+        private const val HOST = "10.100.217.101"
         private const val PORT = 5222
         private const val XMPP_DOMAIN = "10.100.216.71"
     }
